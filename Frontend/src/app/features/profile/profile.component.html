@@ -1,0 +1,132 @@
+<div class="min-h-screen bg-primary-bg py-8 px-4">
+  <div class="container mx-auto max-w-4xl">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-4xl font-bold text-white mb-2">My Profile</h1>
+      <p class="text-text-secondary">Manage your account information</p>
+    </div>
+
+    @if (user()) {
+      <!-- Profile Card -->
+      <div class="bg-card-bg rounded-lg shadow-xl overflow-hidden mb-8">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-accent-blue to-accent-red p-8">
+          <div class="flex items-center space-x-4">
+            <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center">
+              <span class="text-accent-blue font-bold text-3xl">
+                {{ user().username.charAt(0).toUpperCase() }}
+              </span>
+            </div>
+            <div>
+              <h2 class="text-3xl font-bold text-white">{{ user().username }}</h2>
+              <p class="text-white opacity-90">{{ user().email }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Body -->
+        <div class="p-8">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- User ID -->
+            <div>
+              <label class="block text-text-secondary text-sm font-medium mb-1">User ID</label>
+              <p class="text-white text-lg">#{{ user().id }}</p>
+            </div>
+
+            <!-- Username -->
+            <div>
+              <label class="block text-text-secondary text-sm font-medium mb-1">Username</label>
+              <p class="text-white text-lg">{{ user().username }}</p>
+            </div>
+
+            <!-- Email -->
+            <div>
+              <label class="block text-text-secondary text-sm font-medium mb-1">Email</label>
+              <p class="text-white text-lg">{{ user().email }}</p>
+            </div>
+
+            <!-- Role -->
+            <div>
+              <label class="block text-text-secondary text-sm font-medium mb-1">Role</label>
+              <div class="flex flex-wrap gap-2">
+                @for (role of user().roles; track role) {
+                  <span class="bg-accent-blue text-white px-3 py-1 rounded-full text-sm font-semibold">
+                    {{ role }}
+                  </span>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Statistics -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <!-- Total Bookings -->
+        <div class="bg-card-bg rounded-lg p-6 shadow-lg">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-text-secondary font-semibold">Total Bookings</h3>
+            <svg class="w-8 h-8 text-accent-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+          </div>
+          @if (!isLoading()) {
+            <p class="text-4xl font-bold text-white">{{ totalBookings() }}</p>
+          } @else {
+            <div class="animate-pulse h-10 bg-input-bg rounded"></div>
+          }
+        </div>
+
+        <!-- Upcoming Sessions -->
+        <div class="bg-card-bg rounded-lg p-6 shadow-lg">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-text-secondary font-semibold">Upcoming</h3>
+            <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </div>
+          @if (!isLoading()) {
+            <p class="text-4xl font-bold text-white">{{ upcomingBookings() }}</p>
+          } @else {
+            <div class="animate-pulse h-10 bg-input-bg rounded"></div>
+          }
+        </div>
+
+        <!-- Completed Sessions -->
+        <div class="bg-card-bg rounded-lg p-6 shadow-lg">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-text-secondary font-semibold">Completed</h3>
+            <svg class="w-8 h-8 text-accent-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          @if (!isLoading()) {
+            <p class="text-4xl font-bold text-white">{{ completedBookings() }}</p>
+          } @else {
+            <div class="animate-pulse h-10 bg-input-bg rounded"></div>
+          }
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="bg-card-bg rounded-lg p-6 shadow-lg">
+        <h3 class="text-xl font-bold text-white mb-4">Account Actions</h3>
+        <div class="space-y-3">
+          <button
+            (click)="logout()"
+            class="w-full bg-accent-red hover:bg-red-600 text-white font-semibold px-6 py-3 rounded-lg transition-colors flex items-center justify-center space-x-2"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
+    } @else {
+      <div class="flex justify-center items-center py-20">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-accent-blue"></div>
+      </div>
+    }
+  </div>
+</div>

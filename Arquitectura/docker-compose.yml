@@ -1,0 +1,108 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0.0
+    container_name: turnero-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: turnero_db
+      MYSQL_USER: turnero_user
+      MYSQL_PASSWORD: turnero_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - turnero-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpass"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
+
+  # Backend Spring Boot
+  backend:
+    build:
+      context: ../Backend
+      dockerfile: Dockerfile
+    container_name: turnero-backend
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/turnero_db
+      SPRING_DATASOURCE_USERNAME: turnero_user
+      SPRING_DATASOURCE_PASSWORD: turnero_pass
+      JWT_SECRET: club-los-amigos-secret-key-2024-production-ready-256-bits-minimum-security
+      JWT_EXPIRATION: 86400000
+      N8N_WEBHOOK_URL: http://n8n:5678/webhook/turnero-notifications
+      NOTIFICATION_MAX_RETRIES: 3
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - turnero-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+
+  # n8n Workflow Automation
+  n8n:
+    image: n8nio/n8n:1.71.1
+    container_name: turnero-n8n
+    environment:
+      N8N_HOST: n8n
+      N8N_PORT: 5678
+      WEBHOOK_TUNNEL_URL: http://n8n:5678/
+      GENERIC_TIMEZONE: America/Argentina/Buenos_Aires
+    ports:
+      - "5678:5678"
+    volumes:
+      - n8n_data:/home/node/.n8n
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - turnero-network
+
+  # NGINX Reverse Proxy
+  proxy:
+    image: nginx:alpine
+    container_name: turnero-proxy
+    volumes:
+      - ./nginx/nginx-proxy.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - turnero-network
+
+  # Frontend Angular + NGINX Web Server
+  frontend:
+    build:
+      context: ../Frontend
+      dockerfile: Dockerfile
+    container_name: turnero-frontend
+    ports:
+      - "1999:80"
+    volumes:
+      - ./nginx/nginx-frontend.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - proxy
+    networks:
+      - turnero-network
+
+volumes:
+  mysql_data:
+    driver: local
+  n8n_data:
+    driver: local
+
+networks:
+  turnero-network:
+    driver: bridge

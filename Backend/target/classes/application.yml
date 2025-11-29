@@ -1,0 +1,62 @@
+spring:
+  application:
+    name: turnero-backend
+
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/turnero_db}
+    username: ${SPRING_DATASOURCE_USERNAME:turnero_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:turnero_pass}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+        use_sql_comments: true
+
+server:
+  port: 8080
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:default-secret-key-change-in-production}
+  expiration: ${JWT_EXPIRATION:86400000}
+  refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000}
+
+# n8n Webhook Configuration
+n8n:
+  webhook:
+    url: ${N8N_WEBHOOK_URL:http://localhost:5678/webhook/turnero-notifications}
+    enabled: ${N8N_WEBHOOK_ENABLED:false}
+
+notifications:
+  retry:
+    max-attempts: ${NOTIFICATION_MAX_RETRIES:3}
+  reminder:
+    cron: ${NOTIFICATION_REMINDER_CRON:0 0 * * * *}
+    lead-hours: ${NOTIFICATION_REMINDER_LEAD_HOURS:24}
+    window-minutes: ${NOTIFICATION_REMINDER_WINDOW_MINUTES:60}
+
+# Actuator Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when-authorized
+
+# Logging
+logging:
+  level:
+    com.clublosamigos.turnero: INFO
+    org.springframework.security: INFO
+    org.hibernate.SQL: DEBUG

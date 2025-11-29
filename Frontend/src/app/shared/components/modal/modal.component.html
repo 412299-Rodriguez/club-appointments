@@ -1,0 +1,40 @@
+@if (isOpen) {
+  <div class="fixed inset-0 z-50 overflow-y-auto" (click)="onBackdropClick($event)">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-black bg-opacity-75 transition-opacity"></div>
+
+    <!-- Modal -->
+    <div class="flex min-h-full items-center justify-center p-4">
+      <div class="relative bg-card-bg rounded-lg shadow-xl max-w-md w-full transform transition-all">
+        <!-- Header -->
+        <div class="flex items-center justify-between p-6 border-b border-border-color">
+          <h3 class="text-xl font-semibold text-white">{{ title }}</h3>
+          <button (click)="onClose()" class="text-text-secondary hover:text-white transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Body -->
+        <div class="p-6">
+          <ng-content></ng-content>
+        </div>
+
+        <!-- Footer -->
+        @if (showFooter) {
+          <div class="flex items-center justify-end space-x-3 p-6 border-t border-border-color">
+            <button (click)="onCancel()"
+                    class="px-4 py-2 bg-input-bg text-white rounded-lg hover:bg-opacity-80 transition-colors">
+              {{ cancelText }}
+            </button>
+            <button (click)="onConfirm()"
+                    class="px-4 py-2 bg-accent-blue text-white rounded-lg hover:bg-blue-600 transition-colors">
+              {{ confirmText }}
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+}

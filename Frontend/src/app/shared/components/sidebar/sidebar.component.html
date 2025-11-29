@@ -1,0 +1,41 @@
+<aside class="bg-secondary-bg h-full w-64 fixed left-0 top-16 hidden lg:block shadow-xl">
+  <nav class="p-4 space-y-2">
+    <a routerLink="/turnero" routerLinkActive="bg-accent-blue text-white"
+       class="flex items-center space-x-3 px-4 py-3 rounded-lg text-text-primary hover:bg-card-bg transition-colors">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      </svg>
+      <span>Available Sessions</span>
+    </a>
+
+    <a routerLink="/my-bookings" routerLinkActive="bg-accent-blue text-white"
+       class="flex items-center space-x-3 px-4 py-3 rounded-lg text-text-primary hover:bg-card-bg transition-colors">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+      </svg>
+      <span>My Bookings</span>
+    </a>
+
+    <a routerLink="/profile" routerLinkActive="bg-accent-blue text-white"
+       class="flex items-center space-x-3 px-4 py-3 rounded-lg text-text-primary hover:bg-card-bg transition-colors">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+      </svg>
+      <span>Profile</span>
+    </a>
+
+    @if (isAdmin() || isCoach()) {
+      <div class="pt-4 mt-4 border-t border-border-color">
+        <p class="text-text-secondary text-sm font-semibold px-4 mb-2">Admin</p>
+
+        <a routerLink="/admin/sessions" routerLinkActive="bg-accent-blue text-white"
+           class="flex items-center space-x-3 px-4 py-3 rounded-lg text-text-primary hover:bg-card-bg transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+          </svg>
+          <span>Manage Sessions</span>
+        </a>
+      </div>
+    }
+  </nav>
+</aside>

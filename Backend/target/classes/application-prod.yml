@@ -1,0 +1,18 @@
+spring:
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+
+# n8n Webhook enabled in production
+n8n:
+  webhook:
+    enabled: true
+
+# Logging for production
+logging:
+  level:
+    com.clublosamigos.turnero: WARN
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN

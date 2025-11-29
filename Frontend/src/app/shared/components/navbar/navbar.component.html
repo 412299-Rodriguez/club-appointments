@@ -1,0 +1,86 @@
+<nav class="bg-secondary-bg shadow-lg sticky top-0 z-50">
+  <div class="container mx-auto px-4">
+    <div class="flex justify-between items-center h-16">
+      <!-- Logo -->
+      <div class="flex items-center">
+        <a routerLink="/" class="flex items-center space-x-2">
+          <div class="w-10 h-10 bg-accent-red rounded-full flex items-center justify-center">
+            <span class="text-white font-bold text-xl">CA</span>
+          </div>
+          <span class="text-white font-bold text-xl hidden sm:block">Club Los Amigos</span>
+        </a>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center space-x-6">
+        @if (isAuthenticated()) {
+          <a routerLink="/turnero" routerLinkActive="text-accent-blue" class="text-text-primary hover:text-accent-blue transition-colors">
+            Sessions
+          </a>
+          <a routerLink="/my-bookings" routerLinkActive="text-accent-blue" class="text-text-primary hover:text-accent-blue transition-colors">
+            My Bookings
+          </a>
+          <a routerLink="/profile" routerLinkActive="text-accent-blue" class="text-text-primary hover:text-accent-blue transition-colors">
+            Profile
+          </a>
+          <div class="flex items-center space-x-4">
+            <span class="text-text-secondary">{{ currentUser()?.username }}</span>
+            <button (click)="logout()" class="bg-accent-red hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors">
+              Logout
+            </button>
+          </div>
+        } @else {
+          <a routerLink="/login" class="text-text-primary hover:text-accent-blue transition-colors">
+            Login
+          </a>
+          <a routerLink="/register" class="bg-accent-blue hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors">
+            Register
+          </a>
+        }
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="md:hidden">
+        <button (click)="toggleMenu()" class="text-white focus:outline-none">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            @if (!isMenuOpen) {
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            } @else {
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            }
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    @if (isMenuOpen) {
+      <div class="md:hidden pb-4">
+        @if (isAuthenticated()) {
+          <a routerLink="/turnero" (click)="closeMenu()" class="block py-2 text-text-primary hover:text-accent-blue transition-colors">
+            Sessions
+          </a>
+          <a routerLink="/my-bookings" (click)="closeMenu()" class="block py-2 text-text-primary hover:text-accent-blue transition-colors">
+            My Bookings
+          </a>
+          <a routerLink="/profile" (click)="closeMenu()" class="block py-2 text-text-primary hover:text-accent-blue transition-colors">
+            Profile
+          </a>
+          <div class="pt-2 border-t border-border-color mt-2">
+            <span class="block py-2 text-text-secondary">{{ currentUser()?.username }}</span>
+            <button (click)="logout()" class="w-full bg-accent-red hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors">
+              Logout
+            </button>
+          </div>
+        } @else {
+          <a routerLink="/login" (click)="closeMenu()" class="block py-2 text-text-primary hover:text-accent-blue transition-colors">
+            Login
+          </a>
+          <a routerLink="/register" (click)="closeMenu()" class="block py-2 mt-2 bg-accent-blue hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-center transition-colors">
+            Register
+          </a>
+        }
+      </div>
+    }
+  </div>
+</nav>

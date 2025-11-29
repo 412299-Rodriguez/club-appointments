@@ -1,0 +1,96 @@
+<div class="min-h-screen bg-primary-bg py-8 px-4">
+  <div class="container mx-auto max-w-7xl">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-4xl font-bold text-white mb-2">Available Training Sessions</h1>
+      <p class="text-text-secondary">Browse and book your next training session</p>
+    </div>
+
+    <!-- Error Message -->
+    @if (errorMessage()) {
+      <div class="mb-6 p-4 bg-red-900 bg-opacity-50 border border-accent-red rounded-lg">
+        <p class="text-accent-red">{{ errorMessage() }}</p>
+      </div>
+    }
+
+    <!-- Filters -->
+    <div class="bg-card-bg rounded-lg p-6 mb-8 shadow-lg">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Search -->
+        <div>
+          <label class="block text-text-primary font-medium mb-2">Search</label>
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="onSearchChange()"
+            placeholder="Search sessions..."
+            class="w-full px-4 py-2 bg-input-bg border border-border-color rounded-lg text-white placeholder-text-secondary focus:outline-none focus:border-accent-blue"
+          />
+        </div>
+
+        <div>
+          <label class="block text-text-primary font-medium mb-2">Quick Filters</label>
+          <p class="text-text-secondary text-sm">
+            Search by name, description, trainer, or location to find the perfect session.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    @if (isLoading()) {
+      <div class="flex justify-center items-center py-20">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-accent-blue"></div>
+      </div>
+    }
+
+    <!-- Sessions Grid -->
+    @if (!isLoading()) {
+      @if (filteredSessions().length > 0) {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          @for (session of filteredSessions(); track session.id) {
+            <app-session-card
+              [session]="session"
+              [isBooked]="isBooked(session.id)"
+              (bookSession)="onBookSession($event)"
+              (cancelBooking)="onCancelBooking($event)"
+            />
+          }
+        </div>
+      } @else {
+        <div class="text-center py-20">
+          <svg class="w-24 h-24 text-text-secondary mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+          </svg>
+          <h3 class="text-2xl font-semibold text-white mb-2">No Sessions Found</h3>
+          <p class="text-text-secondary">Try adjusting your filters or check back later for new sessions.</p>
+        </div>
+      }
+    }
+  </div>
+</div>
+
+<!-- Booking Confirmation Modal -->
+<app-modal
+  [isOpen]="showBookingModal"
+  [title]="'Confirm Booking'"
+  [confirmText]="'Book Now'"
+  [cancelText]="'Cancel'"
+  (confirmed)="confirmBooking()"
+  (cancelled)="showBookingModal = false"
+  (closed)="showBookingModal = false"
+>
+      @if (selectedSession) {
+        <div class="space-y-4">
+          <p class="text-text-primary">Are you sure you want to book this session?</p>
+          <div class="bg-secondary-bg p-4 rounded-lg space-y-2">
+        <h4 class="font-semibold text-white">{{ selectedSession.name }}</h4>
+        <p class="text-text-secondary text-sm">Trainer: {{ selectedSession.trainer.fullName }}</p>
+        <p class="text-text-secondary text-sm">
+          {{ selectedSession.date }} · {{ selectedSession.startTime }} - {{ selectedSession.endTime }}
+        </p>
+        <p class="text-text-secondary text-sm">{{ selectedSession.location }}</p>
+          </div>
+        </div>
+      }
+</app-modal>

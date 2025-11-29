@@ -1,0 +1,91 @@
+<div class="bg-card-bg rounded-lg shadow-lg overflow-hidden hover:transform hover:scale-105 transition-all">
+  <!-- Header -->
+  <div class="bg-secondary-bg p-4 border-b border-border-color">
+    <div class="flex items-center justify-between mb-2">
+      <h3 class="text-xl font-bold text-white">{{ session.name }}</h3>
+      <span [class]="getStatusClass() + ' text-white text-xs px-3 py-1 rounded-full font-semibold'">
+        {{ session.status }}
+      </span>
+    </div>
+    <p class="text-text-secondary text-sm">Trainer: {{ session.trainer.fullName }}</p>
+  </div>
+
+  <!-- Body -->
+  <div class="p-4 space-y-3">
+    <!-- Description -->
+    <p class="text-text-secondary text-sm">{{ session.description }}</p>
+
+    <!-- Coach -->
+    <div class="flex items-center space-x-2">
+      <svg class="w-5 h-5 text-accent-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+      </svg>
+      <span class="text-white font-medium">{{ session.trainer.fullName }}</span>
+    </div>
+
+    <!-- Date and Time -->
+    <div class="flex items-center space-x-2">
+      <svg class="w-5 h-5 text-accent-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      </svg>
+      <span class="text-white">{{ formatDate(session.date) }}</span>
+    </div>
+
+    <div class="flex items-center space-x-2">
+      <svg class="w-5 h-5 text-accent-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span class="text-white">{{ formatTime(session.startTime) }} - {{ formatTime(session.endTime) }}</span>
+    </div>
+
+    <!-- Location -->
+    <div class="flex items-center space-x-2">
+      <svg class="w-5 h-5 text-accent-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+      <span class="text-white">{{ session.location }}</span>
+    </div>
+
+    <!-- Capacity -->
+    <div class="flex items-center justify-between pt-2 border-t border-border-color">
+      <div class="flex items-center space-x-2">
+        <svg class="w-5 h-5 text-accent-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        <span class="text-white">
+          <span class="font-bold">{{ availableSpots() }}</span> / {{ session.maxParticipants }} spots
+        </span>
+      </div>
+      @if (isFull()) {
+        <span class="text-accent-red text-sm font-semibold">FULL</span>
+      } @else if (isAlmostFull()) {
+        <span class="text-yellow-500 text-sm font-semibold">Almost Full</span>
+      }
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="p-4 bg-secondary-bg border-t border-border-color">
+    @if (isBooked) {
+      <button
+        (click)="onCancel()"
+        class="w-full bg-accent-red hover:bg-red-600 text-white font-semibold py-2 rounded-lg transition-colors"
+      >
+        Cancel Booking
+      </button>
+    } @else {
+      <button
+        (click)="onBook()"
+        [disabled]="isFull()"
+        class="w-full bg-accent-blue hover:bg-blue-600 text-white font-semibold py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        @if (isFull()) {
+          <span>Session Full</span>
+        } @else {
+          <span>Book Session</span>
+        }
+      </button>
+    }
+  </div>
+</div>
