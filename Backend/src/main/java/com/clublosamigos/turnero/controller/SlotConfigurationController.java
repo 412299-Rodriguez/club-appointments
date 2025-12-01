@@ -20,7 +20,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/slot-configurations")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class SlotConfigurationController {
 
     private final SlotConfigurationService slotConfigurationService;

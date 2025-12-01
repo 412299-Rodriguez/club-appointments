@@ -26,7 +26,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(3)]],
+      username: [''], // Campo oculto pero requerido por backend, se generará del email
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]],
@@ -59,8 +59,13 @@ export class RegisterComponent implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
-    const { confirmPassword, ...registerData } = this.registerForm.value;
-    const request: RegisterRequest = registerData;
+    // Generar username del email si no existe
+    const formValue = this.registerForm.value;
+    if (!formValue.username) {
+      formValue.username = formValue.email.split('@')[0];
+    }
+
+    const request: RegisterRequest = formValue;
 
     this.authService.register(request).subscribe({
       next: (response) => {

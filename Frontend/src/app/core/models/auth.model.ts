@@ -17,10 +17,12 @@ export interface AuthResponse {
 }
 
 export interface RegisterRequest {
-  fullName: string;
+  username: string;
   email: string;
   password: string;
   confirmPassword: string;
+  fullName: string;
+  phone?: string;
 }
 
 export type RegisterResponse = AuthResponse;

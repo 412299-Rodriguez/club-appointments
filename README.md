@@ -13,15 +13,17 @@ Complete training session management system for Club Social y Deportivo Los Amig
 
 ### Backend
 - **Java 17** - Programming language
-- **Spring Boot 3.x** - Application framework
+- **Spring Boot 3.2.0** - Application framework
 - **Spring Security** - JWT authentication
 - **MySQL 8.0.0** - Relational database
 - **JPA/Hibernate** - ORM
+- **RabbitMQ 3.12** - Message broker for async notifications
 
 ### Infrastructure
 - **Docker** - Containerization
 - **Docker Compose** - Multi-container orchestration
 - **NGINX** - Reverse proxy
+- **n8n** - Workflow automation for notifications
 
 ## Project Structure
 ```
@@ -98,9 +100,14 @@ SPRING_PROFILES_ACTIVE=prod
 SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/turnero_db
 SPRING_DATASOURCE_USERNAME=turnero_user
 SPRING_DATASOURCE_PASSWORD=turnero_pass
+RABBITMQ_HOST=rabbitmq
+RABBITMQ_PORT=5672
+RABBITMQ_USERNAME=guest
+RABBITMQ_PASSWORD=guest
 JWT_SECRET=your-secret-key-change-in-production-min-256-bits
 JWT_EXPIRATION=86400000
 N8N_WEBHOOK_URL=http://n8n:5678/webhook/turnero-notifications
+N8N_WEBHOOK_ENABLED=true
 ```
 
 ### Frontend (environment.prod.ts)
@@ -126,9 +133,16 @@ API_URL=/api
 
 ### Services Overview
 - **mysql**: MySQL 8.0.0 database (port 3306)
+- **rabbitmq**: RabbitMQ 3.12 message broker (ports 5672, 15672)
 - **backend**: Spring Boot application (internal port 8080)
+- **n8n**: Workflow automation (port 5678)
 - **proxy**: NGINX reverse proxy
 - **frontend**: Angular app served by NGINX (port 1999)
+
+### Access Points
+- **Frontend Application**: http://localhost:1999
+- **RabbitMQ Management UI**: http://localhost:15672 (guest/guest)
+- **n8n Workflow Editor**: http://localhost:5678
 
 ### View Logs
 ```bash
@@ -176,14 +190,12 @@ cd Frontend
 npm test
 ```
 
-## API Documentation
-See [API_DOCUMENTATION.md](Arquitectura/documentation/API_DOCUMENTATION.md) for complete endpoint documentation.
+## Documentation
 
-## Architecture
-See [ARCHITECTURE.md](Arquitectura/documentation/ARCHITECTURE.md) for system architecture details.
-
-## Deployment
-See [DEPLOYMENT.md](Arquitectura/documentation/DEPLOYMENT.md) for production deployment instructions.
+- **[DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)** - Complete deployment and operations guide
+- **[RABBITMQ_INTEGRATION_GUIDE.md](RABBITMQ_INTEGRATION_GUIDE.md)** - RabbitMQ integration architecture and troubleshooting
+- **[API_DOCUMENTATION.md](Arquitectura/documentation/API_DOCUMENTATION.md)** - REST API endpoints (if exists)
+- **[ARCHITECTURE.md](Arquitectura/documentation/ARCHITECTURE.md)** - System architecture (if exists)
 
 ## Features
 
@@ -215,8 +227,11 @@ See [DEPLOYMENT.md](Arquitectura/documentation/DEPLOYMENT.md) for production dep
 - ✅ PWA capabilities
 - ✅ Real-time availability updates
 - ✅ Soft delete (logical delete) for all entities
-- ✅ Email notifications (via n8n webhook)
+- ✅ Asynchronous notifications via RabbitMQ
+- ✅ Email/SMS notifications (via n8n workflow automation)
+- ✅ Notification tracking and audit logs
 - ✅ Role-based access control (RBAC)
+- ✅ Health checks and monitoring endpoints
 
 ## Future Features
 - 🔄 Tournament management

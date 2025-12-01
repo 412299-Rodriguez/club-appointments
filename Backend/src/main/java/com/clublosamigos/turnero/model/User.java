@@ -35,7 +35,7 @@ public class User {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
+    @Column(name = "user_role", nullable = false)
     private UserRole role;
 
     @Column(name = "is_deleted")

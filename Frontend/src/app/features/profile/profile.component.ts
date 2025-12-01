@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/services/auth.service';
 import { BookingService } from '../../core/services/booking.service';
+import { Booking, BookingStatus } from '../../core/models/booking.model';
 
 @Component({
   selector: 'app-profile',
@@ -39,16 +40,17 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
-    this.bookingService.getUserBookings(userId).subscribe({
-      next: (bookings) => {
+    this.bookingService.getMyBookings().subscribe({
+      next: (bookings: Booking[]) => {
         this.totalBookings.set(bookings.length);
 
         const now = new Date();
-        const upcoming = bookings.filter(b =>
-          new Date(b.sessionStartTime) > now && b.status === 'CONFIRMED'
-        ).length;
-        const completed = bookings.filter(b =>
-          b.status === 'COMPLETED'
+        const upcoming = bookings.filter((b: Booking) => {
+          const start = this.getBookingStartDate(b);
+          return !!start && start > now && b.status === BookingStatus.CONFIRMED;
+        }).length;
+        const completed = bookings.filter((b: Booking) =>
+          b.status === BookingStatus.COMPLETED
         ).length;
 
         this.upcomingBookings.set(upcoming);
@@ -68,5 +70,15 @@ export class ProfileComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
+  }
+
+  private getBookingStartDate(booking: Booking): Date | null {
+    if (booking.sessionStartTime) {
+      return new Date(booking.sessionStartTime);
+    }
+    if (booking.trainingSession?.date && booking.trainingSession?.startTime) {
+      return new Date(`${booking.trainingSession.date}T${booking.trainingSession.startTime}`);
+    }
+    return null;
   }
 }

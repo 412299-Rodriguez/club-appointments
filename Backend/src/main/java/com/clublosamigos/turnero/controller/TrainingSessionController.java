@@ -20,7 +20,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/training-sessions")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class TrainingSessionController {
 
     private final TrainingSessionService trainingSessionService;

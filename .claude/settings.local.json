@@ -2,7 +2,28 @@
   "permissions": {
     "allow": [
       "Bash(bash create-all-backend-files.sh:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(mvn clean compile:*)",
+      "Bash(docker-compose config:*)",
+      "Bash(mvn clean package:*)",
+      "Bash(chmod:*)",
+      "Bash(bash verify-rabbitmq.sh:*)",
+      "Bash(docker-compose up:*)",
+      "Bash(docker-compose restart:*)",
+      "Bash(docker-compose logs:*)",
+      "Bash(docker-compose ps:*)",
+      "Bash(docker ps:*)",
+      "Bash(docker exec:*)",
+      "Bash(unzip:*)",
+      "Bash(curl:*)",
+      "Bash(docker-compose stop:*)",
+      "Bash(docker-compose build:*)",
+      "Bash(docker-compose down:*)",
+      "Bash(docker rmi:*)",
+      "Bash(docker build:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(docker-compose rm:*)"
     ],
     "deny": [],
     "ask": []

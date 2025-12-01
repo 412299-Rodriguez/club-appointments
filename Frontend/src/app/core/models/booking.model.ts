@@ -6,13 +6,15 @@ export interface Booking {
   user: User;
   trainingSession: TrainingSession;
   status: BookingStatus;
+  sessionStartTime?: string;
   createdAt?: string;
   updatedAt?: string;
 }
 
 export enum BookingStatus {
   CONFIRMED = 'CONFIRMED',
-  CANCELLED = 'CANCELLED'
+  CANCELLED = 'CANCELLED',
+  COMPLETED = 'COMPLETED'
 }
 
 export interface CreateBookingRequest {
