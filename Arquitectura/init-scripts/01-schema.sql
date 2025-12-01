@@ -10,12 +10,12 @@ CREATE TABLE IF NOT EXISTS users (
     full_name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    role ENUM('SUPER_ADMIN', 'ENTRENADOR', 'USUARIO') NOT NULL DEFAULT 'USUARIO',
+    `role` ENUM('SUPER_ADMIN', 'ENTRENADOR', 'USUARIO') NOT NULL DEFAULT 'USUARIO',
     is_deleted BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_email (email),
-    INDEX idx_role (role),
+    INDEX idx_role (`role`),
     INDEX idx_is_deleted (is_deleted)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

@@ -8,7 +8,7 @@ USE turnero_db;
 -- Password for all users: Admin123!, Trainer123!, User123! respectively
 -- BCrypt hashed with strength 10
 
-INSERT INTO users (full_name, email, password, role, is_deleted) VALUES
+INSERT INTO users (full_name, email, password, `role`, is_deleted) VALUES
 ('Admin Club', 'admin@clublosamigos.com', '$2a$10$N9qo8uLOickgx2ZMRZoMye1w2qKPZ8F4tKPLQ5xPkf5h8qW0qW0qW', 'SUPER_ADMIN', FALSE),
 ('Diego Martínez', 'diego.martinez@clublosamigos.com', '$2a$10$N9qo8uLOickgx2ZMRZoMye1w2qKPZ8F4tKPLQ5xPkf5h8qW0qW0qW', 'ENTRENADOR', FALSE),
 ('Laura Fernández', 'laura.fernandez@clublosamigos.com', '$2a$10$N9qo8uLOickgx2ZMRZoMye1w2qKPZ8F4tKPLQ5xPkf5h8qW0qW0qW', 'ENTRENADOR', FALSE),
